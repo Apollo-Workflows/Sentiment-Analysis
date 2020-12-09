@@ -1,0 +1,13 @@
+[
+  {
+    "forEachIn": "./functions",
+    "do": "cp ../../utils.js .; zip -r deploymentpackage.zip .",
+    "upload": "./deploymentpackage.zip",
+    "config": {
+      "amazon": {
+        "role": "arn:aws:iam::735406098573:role/lambdaexecute",
+        "timeout": 60
+      }
+    }
+  }
+]

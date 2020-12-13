@@ -3,3 +3,5 @@ exports.handler = ({ referenceGenomeArn, numSplits }, context) => {
     splitArns: [...Array(numSplits).keys()].map(i => `refsplitpath${i}`)
   })
 }
+
+// TODO 

@@ -6,7 +6,8 @@
     "config": {
       "amazon": {
         "role": "arn:aws:iam::735406098573:role/lambdaexecute",
-        "timeout": 60
+        "timeout": 60,
+        "region": "eu-central-1"
       }
     }
   }

@@ -1,0 +1,6 @@
+{
+  "referenceGenomeArn": "arn::refgenomearn",
+  "r1Arn": "arn::r1arn",
+  "r2Arn": "arn::r2arn",
+  "numSplits": 3
+}

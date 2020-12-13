@@ -40,15 +40,13 @@ const extractBucket = (filearn) => filearn.match(/(?!^(\d{1,3}\.){3}\d{1,3}$)(^[
 function fetch(bucket, keys, localdir) {
   return Promise.all(
     keys.map(async key => {
-      if(/\//.test(key) === true) {
-        throw new Error("Cannot fetch files that aren't at the root of a bucket: " + key)
-      }
       const content = await getS3(bucket, key)
+      const filename = key.split('/').slice(-1)[0]
       await fsp.writeFile(
-        path.join(localdir, key),
+        path.join(localdir, filename),
         content
       )
-      console.log(`Fetched ${key} to ${path.join(localdir, key)}`)
+      console.log(`Fetched ${key} to ${path.join(localdir, filename)}`)
     })
   )
 }
@@ -60,60 +58,45 @@ function stash(filepaths, bucket) {
       const filename = path.basename(filepath)
       await putS3(bucket, filename, content)
       console.log(`Stashed ${filename} to ${bucket}`)
+      return filename
     })
   )
 }
 
+async function filterUnmapped(infilepath, outfilepath) {
+  const samcontent = await fsp.readFile(infilepath, { encoding: 'utf-8' })
 
-// // 1 level
-// // flattens all in s3workingdir
-// function withFiles(localWorkingDir, s3bucket, s3WorkingDir, callback) {
-//   if(!s3WorkingDir || s3WorkingDir.slice(-1)[0] !== '/') {
-//     throw new Error("withFiles: third argument (s3WorkingDir) must have trailing slash (/)")
-//   }
-//   listS3(s3bucket, s3WorkingDir)
-//     .then(s3paths => {
-//       console.log(s3paths)
-//       return Promise.all(
-//         s3paths.map(async s3path => {
-//           const filecontent = await getS3(s3bucket, s3path)
-//           const filename = s3path.split('/').slice(-1)[0]
-//           if (filename) {
-//             const wpath = path.join(localWorkingDir, filename)
+  const filteredsamcontent = samcontent
+    .split('\n')
+    .filter((l,idx) => {
+      let els = l.split('\t') // sam columns are tab-delimited
+      // Discard lines that have a zero in the fourth column
+      // (means that the read could not be mapped, and thus is not interesting to us)
+      if (
+        els.length >= 4
+        && els[3] != null
+        && isNaN(parseInt(els[3])) === false
+        && parseInt(els[3]) === 0
+      ) {
+        return false
+      }
+      return true
+    })
+    .join('\n')
 
-//             await fsp.writeFile(
-//               wpath,
-//               filecontent,
-//             )
+  console.log(infilepath + " = filtered unmapped reads => " + outfilepath)
+  console.log(samcontent.split('\n').length + " lines => " + filteredsamcontent.split('\n').length + " lines")
+      
+  await fsp.writeFile(outfilepath, filteredsamcontent, { encoding: 'utf-8' })
+}
 
-//             console.log(`Fetched ${s3path} to ${wpath}`)
-//           }
-//         })
-//       )
-//     })
-//     .then(() => {
-//       return callback()
-//     })
-//     // stash all files back to s3
-//     .then(async callbackres => {
-//       const filenames = await fsp.readdir(localWorkingDir)
-//       await Promise.all(
-//         filenames.map(async filename => {
-//           const filepath = path.join(localWorkingDir, filename)
-//           const filecontent = await fsp.readFile(filepath)
-//           await putS3(s3bucket, s3WorkingDir + '/' + filename, filecontent)
-//           console.log(`Stored ${filepath} to ${s3WorkingDir + filename}`)
-//         })
-//       )
-
-//       return callbackres
-//     })
-// }
 
 
 module.exports = {
   getS3,
   putS3,
   fetch,
-  stash
+  stash,
+  filterUnmapped
 };
+

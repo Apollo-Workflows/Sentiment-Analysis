@@ -4,51 +4,33 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-exports.handler = async ({ s3bucket, s3files, s3splitkey, s3R1key, s3R2key, s3prefix }, context) => {
+exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
 
-  // fetch primary files
-  const [
-    refgenomesplitpath, 
-    r1path, 
-    r2path
-  ] = await fetch(s3bucket, [
-    s3splitkey,
-    s3R1key,
-    s3R2key
-  ], '/tmp')
+  // fetch required files
+  const localfiles = await fetch(s3bucket, files, s3prefix)
 
-  // fetch other files
-  await fetch(s3bucket, s3files, '/tmp')
+  const sai1 = '/tmp/aln_sa1.sai'
+  const sai2 = '/tmp/aln_sa2.sai'
 
-  const refgenomesplitname = refgenomesplitpath.split('/').slice(-1)[0]
-  const r1name = r1path.split('/').slice(-1)[0]
-  const r2name = r2path.split('/').slice(-1)[0]
+  execSync(`bwa aln ${localfiles['reference']} ${localfiles['r1']} > ${sai1}`)
+  execSync(`bwa aln ${localfiles['reference']} ${localfiles['r2']} > ${sai2}`)
 
-  const beforefpaths = fs.readdirSync('/tmp')
-    .map(fn => path.join('/tmp', fn))
+  const newfiles = {
+    sai1: sai1,
+    sai2: sai2
+  }
 
-    // TODO see if we can omit cd and just call bwa with paths, and this places in tmp
-  // COMMAND
-  execSync(`cd /tmp; bwa aln ${refgenomesplitname} ${r1name} > aln_sa1.sai`)
-  execSync(`cd /tmp; bwa aln ${refgenomesplitname} ${r2name} > aln_sa2.sai`)
+  let retnamedfiles = await stash(newfiles, s3bucket, s3prefix)
 
-  const afterfpaths = fs.readdirSync('/tmp')
-    .map(fn => path.join('/tmp', fn))
-    
-    console.log("Beforepaths:" + JSON.stringify(beforefpaths)) 
-  
-   console.log("AFterfpaths:" + JSON.stringify(afterfpaths)) 
-  // stash all new files
-  const outkeys = await stash(
-    afterfpaths 
-      .filter(fn => beforefpaths.includes(fn) === false),
-    s3bucket,
-    s3prefix
-  )
+   retnamedfiles = {
+    ...files,
+    ...retnamedfiles
+  }
+
 
   context.succeed({
     s3bucket: s3bucket,
-    s3files: outkeys,
+    files: retnamedfiles,
     s3prefix: s3prefix
   })
 }

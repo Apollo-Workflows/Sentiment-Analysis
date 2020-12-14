@@ -4,33 +4,38 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-exports.handler = async ({ s3bucket, s3splitkey, s3prefix }, context) => {
+/*
+  files = {
+    reference: "some/s3/key"
+  }
+*/
+exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
 
   // fetch required files
-  const [refgenomesplitpath] = await fetch(s3bucket, [s3splitkey], '/tmp')
-
-  const beforefpaths = fs.readdirSync('/tmp')
-    .map(fn => path.join('/tmp', fn))
-
-  const refgenomefilename = refgenomesplitpath.split('/').slice(-1)[0]
+  const localfiles = await fetch(s3bucket, files, s3prefix)
 
   // COMMAND
-  execSync(`cd /tmp; bwa index ${refgenomefilename}`)
+  execSync(`bwa index ${localfiles['reference']}`)
 
-  const afterfpaths = fs.readdirSync('/tmp')
-    .map(fn => path.join('/tmp', fn))
-  
-  // stash all new files with prefix
-  const outkeys = await stash(
-    afterfpaths 
-      .filter(fn => beforefpaths.includes(fn) === false),
-    s3bucket,
-    s3prefix
-  )
+  // compute created file paths 
+  let retnamedfiles = ['amb', 'ann', 'bwt', 'pac', 'sa']
+    .map(suffix => ({ [suffix]: `${localfiles['reference']}.${suffix}` }))
+    .reduce((acc, curr) => ({
+      ...acc,
+      ...curr
+    }), {})
+
+
+  retnamedfiles = await stash(retnamedfiles, s3bucket, s3prefix)
+
+  retnamedfiles = {
+    ...files,
+    ...retnamedfiles
+  }
 
   context.succeed({
     s3bucket: s3bucket,
-    s3keys: outkeys,
+    files: retnamedfiles,
     s3prefix: s3prefix
   })
 }

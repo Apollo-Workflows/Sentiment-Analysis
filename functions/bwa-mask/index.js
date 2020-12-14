@@ -4,11 +4,20 @@ const { execSync } = require('child_process')
 const fsp = require('fs').promises
 const path = require('path')
 
-exports.handler = async ({ s3bucket, s3refgenomekey, numSplits }, context) => {
+/*
+  Expects inputs/reference.fasta, reads/r1.fastq, r2.fastq
+*/
+
+/* 
+  files: {
+    reference: s3key
+  }
+*/
+exports.handler = async ({ s3bucket, files, numSplits }, context) => {
 
   // fetch required files
   // TODO: fetch: return
-  const [refgenomepath] = await fetch(s3bucket, [s3refgenomekey], '/tmp')
+  const localfiles = await fetch(s3bucket, files,)
 
   // create splits of reference genome
   const splitpaths = await split(refgenomepath, numSplits)

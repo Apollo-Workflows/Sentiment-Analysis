@@ -12,7 +12,11 @@ function getS3(bucket, key) {
   };
   return s3.getObject(params)
     .promise()
-    .then((s3obj) => s3obj.Body && Buffer.from(s3obj.Body));
+    .then((s3obj) => s3obj.Body && Buffer.from(s3obj.Body))
+    .catch(e => {
+      console.log(`Key ${key} does not exist in ${bucket}`)
+      throw e
+    })
 }
 
 function putS3(bucket, key, data) {
@@ -58,17 +62,23 @@ async function fetch(bucket, files) {
 }
 
 
-// TODO fix async runaway
-function stash(filepaths, bucket, prefix = '') {
-  return Promise.all(
-    filepaths.map(async filepath => {
-      const content = await fsp.readFile(filepath)
-      const filename = prefix + path.basename(filepath)
-      await putS3(bucket, filename, content)
-      console.log(`Stashed ${filename} to ${bucket}`)
-      return Promise.resolve(filename)
-    })
-  )
+async function stash(files, bucket, prefix = '') {
+  const fnames = Object.keys(files)
+  const fpaths = fnames.map(fn => files[fn])
+
+  let ret = {}
+
+  for(let i = 0; i < fnames.length; i++) {
+    const fname = fnames[i]
+    const localpath = fpaths[i]
+    const outs3key = prefix + localpath.split('/').slice(-1)[0] 
+    const content = await fsp.readFile(localpath)
+    await putS3(bucket, outs3key, content)
+    console.log(`Stashed ${localpath} to ${outs3key}`)
+    ret[fname] = outs3key
+  }
+
+  return ret
 }
 
 async function filterUnmapped(infilepath, outfilepath) {

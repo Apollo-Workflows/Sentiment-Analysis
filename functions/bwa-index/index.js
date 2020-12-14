@@ -4,29 +4,33 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
-exports.handler = async ({ s3bucket, s3files }, context) => {
+exports.handler = async ({ s3bucket, s3splitkey, s3prefix }, context) => {
 
   // fetch required files
-  await fetch(s3bucket, s3files, '/tmp')
+  const [refgenomesplitpath] = await fetch(s3bucket, [s3splitkey], '/tmp')
 
   const beforefpaths = fs.readdirSync('/tmp')
     .map(fn => path.join('/tmp', fn))
 
+  const refgenomefilename = refgenomesplitpath.split('/').slice(-1)[0]
+
   // COMMAND
-  execSync('cd /tmp; bwa index NC_000913.3-hipA7.fasta')
+  execSync(`cd /tmp; bwa index ${refgenomefilename}`)
 
   const afterfpaths = fs.readdirSync('/tmp')
     .map(fn => path.join('/tmp', fn))
   
-  // stash all new files
+  // stash all new files with prefix
   const outkeys = await stash(
     afterfpaths 
       .filter(fn => beforefpaths.includes(fn) === false),
-    s3bucket
+    s3bucket,
+    s3prefix
   )
 
   context.succeed({
     s3bucket: s3bucket,
-    s3files: outkeys
+    s3keys: outkeys,
+    s3prefix: s3prefix
   })
 }

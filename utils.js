@@ -27,28 +27,46 @@ function putS3(bucket, key, data) {
 
 const extractBucket = (filearn) => filearn.match(/(?!^(\d{1,3}\.){3}\d{1,3}$)(^[a-z0-9]([a-z0-9-]*(\.[a-z0-9])?)*$)/)
 
-function fetch(bucket, keys, localdir) {
-  return Promise.all(
-    keys.map(async key => {
-      const content = await getS3(bucket, key)
-      const filename = key.split('/').slice(-1)[0]
-      await fsp.writeFile(
-        path.join(localdir, filename),
-        content
-      )
-      console.log(`Fetched ${key} to ${path.join(localdir, filename)}`)
-    })
-  )
+/**
+ * 
+ * @param {*} bucket 
+ * @param {*} files An object of human-readable handles to s3 keys
+ * @returns {*} An object of human-readable handles to local paths 
+ */
+async function fetch(bucket, files) {
+  const localdir = '/tmp'
+  const fnames = Object.keys(files)
+  const fkeys = fnames.map(fn => files[fn])
+
+  let ret = {}
+
+  for(let i = 0; i < fnames.length; i++) {
+    const fname = fnames[i]
+    const s3key = fkeys[i]
+    const filename = s3key.split('/').slice(-1)[0]
+    const outpath = path.join('/tmp', filename)
+    const content = await getS3(bucket, s3key)
+    await  fsp.writeFile(
+      outpath,
+      content
+    )
+    console.log(`Fetched ${s3key} to ${outpath}`)
+    ret[fname] = outpath
+  }
+
+  return ret
 }
 
-function stash(filepaths, bucket) {
+
+// TODO fix async runaway
+function stash(filepaths, bucket, prefix = '') {
   return Promise.all(
     filepaths.map(async filepath => {
       const content = await fsp.readFile(filepath)
-      const filename = path.basename(filepath)
+      const filename = prefix + path.basename(filepath)
       await putS3(bucket, filename, content)
       console.log(`Stashed ${filename} to ${bucket}`)
-      return filename
+      return Promise.resolve(filename)
     })
   )
 }
@@ -129,9 +147,7 @@ async function split(infastapath, n) {
 
   return outpaths
 
-
 }
-
 
 module.exports = {
   getS3,
@@ -141,6 +157,4 @@ module.exports = {
   filterUnmapped,
   split
 };
-
-
 

@@ -1,13 +1,13 @@
 {
   "name": "workflows",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "AFCL Workflows from various domains",
   "main": "utils.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "DPS UIBK <jakob.wallnoefer@student.uibk.ac.at>",
+  "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.806.0"
   }

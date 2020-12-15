@@ -4,39 +4,35 @@ const { execSync } = require('child_process')
 const fsp = require('fs').promises
 const path = require('path')
 
-/*
-  Expects inputs/reference.fasta, reads/r1.fastq, r2.fastq
-*/
 
-/* 
-  files: {
-    reference: s3key
-  }
-*/
 exports.handler = async ({ s3bucket, files, numSplits }, context) => {
+  
+  // fetch required files                // notion of prefix does not exist before splitting
+  const localfiles = await fetch(s3bucket, files)
 
-  // fetch required files
-  // TODO: fetch: return
-  const localfiles = await fetch(s3bucket, files,)
+  // split reference genome
+  const splitpaths = await split(localfiles['reference'], numSplits)
 
-  // create splits of reference genome
-  const splitpaths = await split(refgenomepath, numSplits)
-  const prefixes = [...Array(numSplits)].map(() => `${Math.ceil(Math.random() * 1000000)}/`)
- 
-  const s3splitkeys = await Promise.all(
-    splitpaths.map(async (splp,idx) => {
-      const prefix = prefixes[idx] // trailing slash for s3 foldering
-      const name = splp.split('/').slice(-1)[0]
-      const key = prefix + name
-      const contents = await fsp.readFile(splp)
-      await putS3(s3bucket, key, contents)
-      return key
-    })
-  )
+  let retnamedfiles = {}
+
+  const prefixes = [...Array(splitpaths.length)].map(() => `${Math.ceil(Math.random() * 1000000)}/`)
+
+  // stash each with individual s3 prefix
+  for (let i = 0; i < splitpaths.length; i += 1) {
+    const prefix = prefixes[i]
+    const retnamedfile = await stash({ [`reference${i}`]: splitpaths[i] }, s3bucket, prefix)
+    retnamedfiles = { 
+      ...retnamedfiles,
+      ...retnamedfile
+    }
+  }
+
+  const s3splitkeys = Object.values(retnamedfiles)
 
   context.succeed({
     s3bucket: s3bucket,
     s3splitkeys: s3splitkeys,
-    s3prefixes: prefixes
+    s3prefixes: prefixes,
   })
+
 }

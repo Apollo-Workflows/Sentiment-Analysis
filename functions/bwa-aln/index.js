@@ -7,7 +7,7 @@ const path = require('path')
 exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
 
   // fetch required files
-  const localfiles = await fetch(s3bucket, files, s3prefix)
+  const localfiles = await fetch(s3bucket, files)
 
   const sai1 = '/tmp/aln_sa1.sai'
   const sai2 = '/tmp/aln_sa2.sai'

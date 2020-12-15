@@ -9,10 +9,12 @@ const path = require('path')
     reference: "some/s3/key"
   }
 */
-exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
+exports.handler = async ({ s3bucket, s3splitkey, s3prefix }, context) => {
+
+  const files = { reference: s3splitkey }
 
   // fetch required files
-  const localfiles = await fetch(s3bucket, files, s3prefix)
+  const localfiles = await fetch(s3bucket, files)
 
   // COMMAND
   execSync(`bwa index ${localfiles['reference']}`)

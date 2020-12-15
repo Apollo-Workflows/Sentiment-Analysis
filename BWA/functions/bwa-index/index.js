@@ -5,16 +5,34 @@ const fs = require('fs')
 const path = require('path')
 
 /*
-  files = {
-    reference: "some/s3/key"
-  }
+  {
+  "s3bucket": "jak-bwa-bucket",
+  "s3splitkeys": [
+    "344918/NC_000913.3-hipA7.fasta-0.fasta",
+    "541209/NC_000913.3-hipA7.fasta-1.fasta",
+    "114713/NC_000913.3-hipA7.fasta-2.fasta",
+    "25995/NC_000913.3-hipA7.fasta-3.fasta"
+  ],
+  "files": {
+    "reference": "input/NC_000913.3-hipA7.fasta",
+    "r1": "input/reads/hipa7_reads_R1.fastq",
+    "r2": "input/reads/hipa7_reads_R2.fastq"
+  },
+  "s3prefixes": [
+    "344918/",
+    "541209/",
+    "114713/",
+    "25995/"
+  ]
+}
+
 */
-exports.handler = async ({ s3bucket, s3splitkey, s3prefix }, context) => {
+exports.handler = async ({ s3bucket, s3splitkey, files, s3prefix }, context) => {
 
-  const files = { reference: s3splitkey }
+  const _files = { reference: s3splitkey }
 
-  // fetch required files
-  const localfiles = await fetch(s3bucket, files)
+  // fetch reference split
+  const localfiles = await fetch(s3bucket, _files)
 
   // COMMAND
   execSync(`bwa index ${localfiles['reference']}`)
@@ -32,6 +50,7 @@ exports.handler = async ({ s3bucket, s3splitkey, s3prefix }, context) => {
 
   retnamedfiles = {
     ...files,
+    ..._files,
     ...retnamedfiles
   }
 

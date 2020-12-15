@@ -4,6 +4,26 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
+/*
+
+
+{
+  "s3bucket": "jak-bwa-bucket",
+  "files": {
+    "reference": "224093/NC_000913.3-hipA7.fasta-2.fasta",
+    "r1": "input/reads/hipa7_reads_R1.fastq",
+    "r2": "input/reads/hipa7_reads_R2.fastq",
+    "amb": "224093/NC_000913.3-hipA7.fasta-2.fasta.amb",
+    "ann": "224093/NC_000913.3-hipA7.fasta-2.fasta.ann",
+    "bwt": "224093/NC_000913.3-hipA7.fasta-2.fasta.bwt",
+    "pac": "224093/NC_000913.3-hipA7.fasta-2.fasta.pac",
+    "sa": "224093/NC_000913.3-hipA7.fasta-2.fasta.sa"
+  },
+  "s3prefix": "224093/"
+}
+
+*/
+
 exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
 
   // fetch required files

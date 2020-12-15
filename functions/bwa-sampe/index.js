@@ -27,6 +27,7 @@ exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
   context.succeed({
     s3bucket: s3bucket,
     files: retnamedfiles,
-    s3prefix: s3prefix
+    s3prefix: s3prefix,
+    s3samkey: retnamedfiles['sam']
   })
 }

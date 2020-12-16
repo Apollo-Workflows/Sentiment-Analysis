@@ -1,6 +1,6 @@
 {
   "name": "workflows",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "AFCL Workflows from various domains",
   "main": "utils.js",
   "scripts": {

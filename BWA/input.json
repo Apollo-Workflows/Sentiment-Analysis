@@ -1,6 +1,9 @@
 {
-  "referenceGenomeArn": "arn::refgenomearn",
-  "r1Arn": "arn::r1arn",
-  "r2Arn": "arn::r2arn",
+  "s3bucket": "jak-bwa-bucket",
+  "files": {
+    "reference": "input/NC_000913.3-hipA7.fasta",
+    "r1": "input/reads/hipa7_reads_R1.fastq",
+    "r2": "input/reads/hipa7_reads_R2.fastq"
+  },
   "numSplits": 3
 }

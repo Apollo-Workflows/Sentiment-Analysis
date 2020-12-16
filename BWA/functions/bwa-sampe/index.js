@@ -6,6 +6,7 @@ const path = require('path')
 
 exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
 
+  files = JSON.parse(files)
   // fetch required files
   const localfiles = await fetch(s3bucket, files, s3prefix)
 
@@ -26,7 +27,7 @@ exports.handler = async ({ s3bucket, files, s3prefix }, context) => {
 
   context.succeed({
     s3bucket: s3bucket,
-    files: retnamedfiles,
+    files: JSON.stringify(retnamedfiles),
     s3prefix: s3prefix,
     s3samkey: retnamedfiles['sam']
   })

@@ -29,6 +29,8 @@ const path = require('path')
 */
 exports.handler = async ({ s3bucket, s3splitkey, files, s3prefix }, context) => {
 
+  files = JSON.parse(files)
+
   const _files = { reference: s3splitkey }
 
   // fetch reference split
@@ -56,7 +58,7 @@ exports.handler = async ({ s3bucket, s3splitkey, files, s3prefix }, context) => 
 
   context.succeed({
     s3bucket: s3bucket,
-    files: retnamedfiles,
+    files: JSON.stringify(retnamedfiles),
     s3prefix: s3prefix
   })
 }

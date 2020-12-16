@@ -30,7 +30,7 @@ exports.handler = async ({ s3bucket, files, numSplits }, context) => {
   context.succeed({
     s3bucket: s3bucket,
     s3splitkeys: s3splitkeys,
-    files: files,
+    files: JSON.stringify(files),
     s3prefixes: prefixes,
   })
 

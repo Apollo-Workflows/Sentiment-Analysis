@@ -1,9 +1,9 @@
 {
-  "s3bucket": "jak-bwa-bucket",
+  "s3bucket": "YOUR_BUCKET",
   "files": {
-    "reference": "input/NC_000913.3-hipA7.fasta",
-    "r1": "input/reads/hipa7_reads_R1.fastq",
-    "r2": "input/reads/hipa7_reads_R2.fastq"
+    "reference": "YOUR_KEY_OF_NC_000913.3-hipA7.fasta",
+    "r1": "YOUR_KEY_OF_hipa7_reads_R1.fastq",
+    "r2": "YOUR_KEY_OF_hipa7_reads_R2.fastq"
   },
   "numSplits": 3
 }

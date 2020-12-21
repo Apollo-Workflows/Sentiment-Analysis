@@ -4,9 +4,9 @@ AFCL Workflows from various domains
 
 ### Summary
 
-name | description |  draft | functions | orchestration | validity checks | metrics 
---- | ---- | ----- | ----- | ---- | ---- | ----
-[`BWA`](https://github.com/ApolloCEC/workflows/tree/master/BWA)  | BWA is a common life sciences task of performing DNA read alignment | ✅ | ✅ | ✅ | | 
+name | description |  draft | functions | orchestration | datasets |validity checks | metrics 
+--- | ---- | ----- | ----- | ---- | ---- | ---- | -----
+[`BWA`](https://github.com/ApolloCEC/workflows/tree/master/BWA)  | BWA is a common life sciences task of performing DNA read alignment | ✅ | ✅ | ✅ | Escherichia coli, Trypanosoma brucei |  | 
 
 ### Pool
 

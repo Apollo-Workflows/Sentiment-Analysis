@@ -1,0 +1,15 @@
+[
+  {
+    "forEachIn": "./py-functions",
+    "do": "zip -r deploypackage.zip .",
+    "upload": "./deploypackage.zip",
+    "config": {
+      "amazon": {
+        "role": "arn:aws:iam::735406098573:role/lambdaexecute",
+        "timeout": 60,
+        "region": "eu-central-1",
+        "ram": 512
+      }
+    }
+  }
+]

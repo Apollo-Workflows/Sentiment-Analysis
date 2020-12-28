@@ -1,3 +1,4 @@
 */**/node_modules
-BWA/credentials.properties
-BWA/xAFCL.jar
+env
+credentials.properties
+xAFCL.jar

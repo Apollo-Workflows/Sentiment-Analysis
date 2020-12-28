@@ -1,0 +1,99 @@
+---
+name: "SENTIM"
+dataIns:
+- name: "all_tweets"
+  type: "collection"
+  source: "all_tweets"
+- name: "desired_num_batches"
+  type: "number"
+  source: "desired_num_batches"
+workflowBody:
+- function:
+    name: "sentim-batch"
+    type: "sentim-batch-type"
+    dataIns:
+    - name: "all_tweets"
+      type: "collection"
+      source: "SENTIM/all_tweets"
+    - name: "desired_num_batches"
+      type: "number"
+      source: "SENTIM/desired_num_batches"
+    dataOuts:
+    - name: "batches"
+      type: "collection"
+    - name: "num_batches"
+      type: "number"
+    - name: "num_tweets_total"
+      type: "number"
+    properties:
+    - name: "resource"
+      value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-batch"
+- parallelFor:
+    name: "ParallelFor"
+    dataIns:
+    - name: "tweets"
+      type: "collection"
+      source: "sentim-batch/batches"
+      constraints:
+      - name: "distribution"
+        value: "BLOCK(1)"
+    loopCounter:
+      type: "number"
+      to: "sentim-batch/num_batches"
+      step: "1"
+    loopBody:
+    - function:
+        name: "sentim-preprocess"
+        type: "sentim-preprocess-type"
+        dataIns:
+        - name: "tweets"
+          type: "collection"
+          source: "ParallelFor/tweets"
+        dataOuts:
+        - name: "tokenized_tweets"
+          type: "collection"
+        properties:
+        - name: "resource"
+          value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-preprocess"
+    - function:
+        name: "sentim-inference-textblob"
+        type: "sentim-inference-textblob-type"
+        dataIns:
+        - name: "tokenized_tweets"
+          type: "collection"
+          source: "sentim-preprocess/tokenized_tweets"
+        dataOuts:
+        - name: "annotated_tweets"
+          type: "collection"
+        properties:
+        - name: "resource"
+          value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-inference-textblob"
+    dataOuts:
+    - name: "InferenceOutputs"
+      type: "collection"
+      source: "sentim-inference-textblob/annotated_tweets"
+- function:
+    name: "sentim-reduce"
+    type: "sentim-reduce-type"
+    dataIns:
+    - name: "InferenceOutputs"
+      type: "collection"
+      source: "ParallelFor/InferenceOutputs"
+    dataOuts:
+    - name: "analysis_json"
+      type: "string"
+    - name: "churn"
+      type: "number"
+    properties:
+    - name: "resource"
+      value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-reduce"
+dataOuts:
+- name: "analysis_json"
+  type: "string"
+  source: "sentim-reduce/analysis_json"
+- name: "churn"
+  type: "number"
+  source: "sentim-reduce/churn"
+- name: "num_tweets_total"
+  type: "number"
+  source: "sentim-batch/num_tweets_total"

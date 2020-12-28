@@ -1,7 +1,10 @@
 import re
 
+# { 'text': string, 'id': number, 'location': 'string' }
 def preprocess(tweet): 
-  sentences = tweet.replace('!', '.').replace('?', '.').split('.') # quick and dirty
+  # split text into sentences
+  text = tweet['text']
+  sentences = text.replace('!', '.').replace('?', '.').split('.') # quick and dirty
   # filter empty strings (sentences)
   sentences = [ sentence for sentence in sentences if sentence ]
   print("sentences: ", sentences)
@@ -14,7 +17,7 @@ def preprocess(tweet):
     processed_sentence = [ word for word in processed_sentence if word ]
     processed_sentences.append(processed_sentence)
   
-  return processed_sentences
+  return { 'sentences': processed_sentences, 'id': tweet['id'], 'location': tweet['location'] }
 
 
 # Tokenizes and normalizes (TODO) tweets

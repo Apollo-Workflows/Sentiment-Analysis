@@ -1,20 +1,20 @@
 
-# TODO put together ie undo batching
 
-# Group tweets by location
 def lambda_handler(event, context): 
-  annotated_tweets = event['annotated_tweets']
+  InferenceOutputs = event['InferenceOutputs'] # Array of outputs of sentim_inference
   grouped = {}
 
-  for annotated_tweet in annotated_tweets:
-    location = annotated_tweet['location']
-    if((location in grouped) is False): 
-      grouped[location] = []
-      # TODO stip everything but sentiment
-      # or reduce compleetely per state, add stdderivation, mean, percentiles etc
-    grouped[location].append(annotated_tweet)
+  # Group tweets over all batches by location
+  for annotated_tweets_object in InferenceOutputs:
+    for annotated_tweet in annotated_tweets_object['annotated_tweets']:
+      location = annotated_tweet['location']
+      if((location in grouped) is False): 
+        grouped[location] = []
+        # TODO stip everything but sentiment
+        # or reduce compleetely per state, add stdderivation, mean, percentiles etc
+      grouped[location].append(annotated_tweet)
 
-
+  # Calculate metrics over all batches
   metrics = { 'average_sentiment': { } }
   for (location, location_tweets) in grouped.items():
     sentiments = [ tweet['sentiment'] for tweet in location_tweets ]

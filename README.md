@@ -68,3 +68,11 @@ Use for personal reference only.
 ![Chart showing metrics of input-200-tweets.json](https://github.com/ApolloCEC/workflows/blob/master/SENTIM/metrics/input-200-tweets-metrics.png)
 ![Chart showing metrics of input-20000-tweets.json](https://github.com/ApolloCEC/workflows/blob/master/SENTIM/metrics/input-20000-tweets-metrics.png)
 
+
+#### References
+
+**Twitter data set**: [Z. Cheng, J. Caverlee, and K. Lee. You Are Where You Tweet: A Content-Based Approach to Geo-locating Twitter Users. In Proceeding of the 19th ACM Conference on Information and Knowledge Management (CIKM), Toronto, Oct 2010](https://archive.org/details/twitter_cikm_2010) (Accessed Dec 14 2020)
+
+**Tensorflow Text classification model (used in `sentim-inference`):** [Text classification | Tensorflow Lite](https://www.tensorflow.org/lite/models/text_classification/overview) (Accessed Dec 22 2020)
+
+**Textblob Library (used in `sentim-inference-textblob`)**: [sloria/TextBlob | GitHub](https://github.com/sloria/textblob) (Accessed Dec 25 2020)

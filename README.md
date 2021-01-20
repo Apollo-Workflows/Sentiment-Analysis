@@ -28,8 +28,11 @@ cd workflows/SENTIM
 
 name | fetch command 
 ----|----
-[`input-200-tweets.json`](https://github.com/ApolloCEC/workflows/blob/master/SENTIM/datasets/input-200-tweets.json) | `wget https://github.com/ApolloCEC/workflows/blob/master/SENTIM/datasets/input-200-tweets.json -O input.json`
-[`input-20000-tweets.json`](https://github.com/ApolloCEC/workflows/blob/master/SENTIM/datasets/input-20000-tweets.json) | `wget https://github.com/ApolloCEC/workflows/blob/master/SENTIM/datasets/input-20000-tweets.json -O input.json` 
+[`input-200-tweets.json`](https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-200-tweets.json) | `wget https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-200-tweets.json -O input.json`
+[`input-5000-tweets.json`](https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-20000-tweets.json) | `wget https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-5000-tweets.json -O input.json` 
+[`input-10000-tweets.json`](https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-20000-tweets.json) | `wget https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-10000-tweets.json -O input.json` 
+[`input-15000-tweets.json`](https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-20000-tweets.json) | `wget https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-15000-tweets.json -O input.json` 
+[`input-20000-tweets.json`](https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-20000-tweets.json) | `wget https://github.com/Apollo-Workflows/Sentiment-Analysis/blob/master/datasets/input-20000-tweets.json -O input.json` 
 
 The original authors of the datasets are [Z. Cheng, J. Caverlee, and K. Lee. You Are Where You Tweet: A Content-Based Approach to Geo-locating Twitter Users. In Proceeding of the 19th ACM Conference on Information and Knowledge Management (CIKM), Toronto, Oct 2010](https://archive.org/details/twitter_cikm_2010)
 

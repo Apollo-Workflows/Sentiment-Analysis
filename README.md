@@ -10,6 +10,13 @@ There are two workflows flavors, `workflow*` and `workflow-slim*`:
 * `workflows*` are runnable, and well-tested on the current version of xAFCL.
 * `workflows-slim*` are aspirational workflows where the dataflow is optimized to its theoretical limit, but are not tested on the current version of xAFCL.
 
+
+![workflow-slim diagram](./diagrams/workflow-slim.svg)
+
+**Fig 1: workflow-slim.yaml control and data flow**
+
+
+
 #### Get the code
 
 ```

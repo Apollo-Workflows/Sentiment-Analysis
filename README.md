@@ -1,6 +1,6 @@
 # Sentiment Analysis
 
-Inferring US states sentiment via Tweets using a pre-trained TF Net, or alternatively with corpus lookup
+Inferring US states sentiment via Tweets using a pre-trained TF Net, or alternatively using NLTK language corpus lookup.
 
 
 #### Get the code

@@ -1,0 +1,131 @@
+---
+name: "SENTIM"
+dataIns:
+- name: "all_tweets"
+  type: "collection"
+  source: "all_tweets"
+- name: "desired_num_batches"
+  type: "number"
+  source: "desired_num_batches"
+- name: "inference_type"
+  type: "string"
+  source: "inference_type"
+workflowBody:
+- function:
+    name: "sentim-batch"
+    type: "collection"
+    dataIns:
+    - name: "all_tweets"
+      type: "collection"
+      source: "SENTIM/all_tweets"
+    - name: "desired_num_batches"
+      type: "number"
+      source: "SENTIM/desired_num_batches"
+    dataOuts:
+    - name: "batches"
+      type: "collection"
+    - name: "num_batches"
+      type: "number"
+    properties:
+    - name: "resource"
+      value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-batch"
+- parallelFor:
+    name: "ParallelFor"
+    dataIns:
+    - name: "tweets"
+      type: "collection"
+      source: "sentim-batch/batches"
+      constraints:
+      - name: "distribution"
+        value: "BLOCK(1)"
+    - name: "inference_type"
+      type: "string"
+      source: "SENTIM/inference_type"
+    loopCounter:
+      type: "number"
+      to: "sentim-batch/num_batches"
+      step: "1"
+    loopBody:
+    - function:
+        name: "sentim-preprocess"
+        type: "Collection"
+        dataIns:
+        - name: "tweets"
+          type: "collection"
+          source: "ParallelFor/tweets"
+        dataOuts:
+        - name: "tokenized_tweets"
+          type: "collection"
+        properties:
+        - name: "resource"
+          value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-preprocess"
+    - if:
+        name: "IfThenElse"
+        dataIns:
+        - name: "tokenized_tweets"
+          type: "collection"
+          source: "sentim-preprocess/tokenized_tweets"
+        condition:
+          combinedWith: "and"
+          conditions:
+          - data1: "ParallelFor/inference_type"
+            data2: "TENSORFLOW"
+            operator: "="
+        then:
+        - function:
+            name: "sentim-inference"
+            type: "Collection"
+            dataIns:
+            - name: "tokenized_tweets"
+              type: "collection"
+              source: "sentim-preprocess/tokenized_tweets"
+            dataOuts:
+            - name: "annotated_tweets"
+              type: "collection"
+            properties:
+            - name: "resource"
+              value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-inference"
+        else:
+        - function:
+            name: "sentim-inference-textblob"
+            type: "Collection"
+            dataIns:
+            - name: "tokenized_tweets"
+              type: "collection"
+              source: "sentim-preprocess/tokenized_tweets"
+            dataOuts:
+            - name: "annotated_tweets"
+              type: "collection"
+            properties:
+            - name: "resource"
+              value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-inference-textblob"
+        dataOuts:
+        - name: "annotated_tweets"
+          type: "collection"
+          source: "sentim-inference-textblob/annotated_tweets,sentim-inference/annotated_tweets"
+    dataOuts:
+    - name: "InferenceOutputs"
+      type: "collection"
+      source: "IfThenElse/annotated_tweets"
+- function:
+    name: "sentim-reduce"
+    type: "aType"
+    dataIns:
+    - name: "InferenceOutputs"
+      type: "collection"
+      source: "ParallelFor/InferenceOutputs"
+    dataOuts:
+    - name: "analysis_json"
+      type: "string"
+    - name: "churn"
+      type: "number"
+    properties:
+    - name: "resource"
+      value: "arn:aws:lambda:eu-central-1:735406098573:function:sentim-reduce"
+dataOuts:
+- name: "analysis_json"
+  type: "string"
+  source: "sentim-reduce/analysis_json"
+- name: "churn"
+  type: "number"
+  source: "sentim-reduce/churn"

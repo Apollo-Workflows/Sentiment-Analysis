@@ -1,7 +1,6 @@
 # Sentiment Analysis
 
-Sentiment Analysis is a common natural language processing task.
-This workflow analyzed a large amount of Tweets using a pre-trained Tensorflow Net, or alternatively using NLTK language corpus lookup, to determine sentiment per US state.
+This workflow analyzes a large amount of Tweets using a pre-trained Tensorflow Net, or alternatively using NLTK language corpus lookup, to determine sentiment per US state.
 
 #### Overview
 

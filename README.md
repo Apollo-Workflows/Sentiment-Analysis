@@ -1,14 +1,14 @@
 # Sentiment Analysis
 
-Inferring US states sentiment via Tweets using a pre-trained TF Net, or alternatively using NLTK language corpus lookup.
+This workflow analyzes a large amount of Tweets using a pre-trained Tensorflow Net, or alternatively using NLTK language corpus lookup, to determine sentiment per US state.
 
 #### Overview
 
 This repository contains a parallel sentiment analysis implementation, orchestrated with the Abstract Function Choreography Language and runnable on the [xAFCL Enactment Engine](https://github.com/sashkoristov/enactmentengine)
 
-There are two workflows flavors, `workflow*` and `workflow-slim*`:
-* `workflows*` are runnable, and well-tested on the current version of xAFCL.
-* `workflows-slim*` are aspirational workflows where the dataflow is optimized to its theoretical limit, but are not tested on the current version of xAFCL.
+There are two workflows flavors, `workflow` and `workflow-slim`:
+* `workflows` are runnable, and well-tested on the current version of xAFCL.
+* `workflows-slim` are aspirational workflows where the dataflow is optimized to its theoretical limit, but are not tested on the current version of xAFCL.
 
 
 ![workflow-slim diagram](./diagrams/workflow-slim.svg)
@@ -20,9 +20,9 @@ There are two workflows flavors, `workflow*` and `workflow-slim*`:
 #### Get the code
 
 ```
-git clone https://github.com/ApolloCEC/workflows
-cd workflows/SENTIM
-``` 
+git clone https://github.com/Apollo-Workflows/Sentiment-Analysis
+cd Sentiment-Analysis
+```
 
 #### Get an input dataset
 
@@ -63,17 +63,22 @@ Furthermore, ensure that `sentim-inference` has Tensorflow Lite available (you c
 #### Run the workflow
 
 
+Open `workflow.yaml`, and update the `resource` fields to the ARNs of your deployed Lambdas. You can find the ARNs in your [AWS Lambda Console](http://console.aws.amazon.com/lambda).
+
+```yaml
+ ...
+ properties:
+    - name: "resource"
+      value: "arn:aws:lambda:XXXXXXXXXXXXXXXXXXXXXX:sentim-inference"
+ ...
 ```
 
-  TODO: Instructions / script on how to update ARNs in workflow.yaml after deployment
-
-
-```
+Then, you can run the workflow:
 
 ```
-cd SENTIM
-java -jar YOUR_PATH_TO_xAFCL.jar ./workflow.yaml ./input.json
+$ java -jar YOUR_PATH_TO_xAFCL.jar ./workflow.yaml ./input.json
 ```
+
 
 #### Preliminary Metrics
 

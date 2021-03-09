@@ -8,8 +8,8 @@ def batch(arr, n):
 def lambda_handler(event, context):
   # read in the args from the POST object
   json_input = json.loads(event['body'])
-  all_tweets = json_input['all_tweets']
-  desired_num_batches = json_input['desired_num_batches']
+  all_tweets = json_input['arrayToSplit']
+  desired_num_batches = json_input['splitNumber']
   
   # do the calculation
   batch_size = math.ceil(len(all_tweets) / desired_num_batches)
@@ -18,7 +18,7 @@ def lambda_handler(event, context):
   
   # return the result
   res = { 
-    'batches': keyed, 
+    'subArrays': keyed, 
     'num_batches': len(batched_all_tweets), 
     'num_tweets_total': len(all_tweets)
   }
@@ -28,4 +28,5 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': json.dumps(res)
     }
+
 

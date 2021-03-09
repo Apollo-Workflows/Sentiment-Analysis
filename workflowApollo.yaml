@@ -14,23 +14,23 @@ dataIns:
 workflowBody:
 - function:
     name: "sentim-batch"
-    type: "sentim-batch"
+    type: "SplitArray"
     dataIns:
-    - name: "all_tweets"
+    - name: "arrayToSplit"
       type: "collection"
       source: "SENTIM/all_tweets"
-    - name: "desired_num_batches"
+    - name: "splitNumber"
       type: "number"
       source: "SENTIM/desired_num_batches"
     dataOuts:
-    - name: "batches"
+    - name: "subArrays"
       type: "collection"
 - parallelFor:
     name: "ParallelFor"
     dataIns:
     - name: "tweets"
       type: "collection"
-      source: "sentim-batch/batches"
+      source: "sentim-batch/subArrays"
     - name: "inference_type"
       type: "string"
       source: "SENTIM/inference_type"

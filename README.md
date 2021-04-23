@@ -60,6 +60,8 @@ The serverless functions are in `py-functions-amazon` or `py-functions-google`. 
 
 Furthermore, ensure that `sentim-inference` has Tensorflow Lite available (you can attach this Lambda Layer: `s3://jak-sentim-bucket/tflite-for-amazon-linux-env.zip`), and runs on Python 3.7.
 
+For auto deployment on AWS you can put your credentials file to `py-functions-amazon/credentials` and execute `./deploy.sh` (terraform needs to be installed).
+
 #### Run the workflow
 
 

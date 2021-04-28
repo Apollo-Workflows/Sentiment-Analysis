@@ -1,7 +1,14 @@
 # Shared credentials file and region configuration
+
+variable "region" {
+  type        = string
+  description = "The AWS region for the deployment. See https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html"
+  default = "us-east-1"
+}
+
 provider "aws" {
   shared_credentials_file = "credentials"
-  region                  = "us-east-1"
+  region                  = var.region
 }
 
 # Create a new aws iam role

@@ -56,11 +56,6 @@ def annotate_sentim_tweet(tweet):
 def lambda_handler(event, context):
     json_input = json.loads(event['body'])
     
-    return {
-        'statusCode': 200,
-        'body': json.dumps({'annotated_tweets': json_input})
-    }
-    
     tokenized_tweets = json_input['tokenized_tweets']
     resArr = []
 

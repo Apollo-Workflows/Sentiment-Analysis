@@ -1,9 +1,8 @@
 #!/bin/bash
-####################################################################
-## Creates a zip file from a given path of a lambda function. The  #
-## created file can directly be upload to AWS Lambda.              #
-####################################################################
-
+#####################################################################
+## Creates a zip file from a given path of a lambda function. The  ##
+## created file can directly be upload to AWS Lambda.              ##
+#####################################################################
 
 
 if [[ $# -eq 0 ]] ; then
@@ -13,8 +12,6 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 folderName=$(basename $1)
-
-echo $folderName
 
 cd $1
 

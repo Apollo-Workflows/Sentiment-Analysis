@@ -9,3 +9,11 @@ aws/lambda-functions/sentim-preprocess.zip
 aws/lambda-functions/sentim-reduce.zip
 aws/terraform.tfstate
 aws/terraform.tfstate.backup
+ibm/.terraform
+ibm/functions/sentim-batch.zip
+ibm/functions/sentim-inference-textblob.zip
+ibm/functions/sentim-inference.zip
+ibm/.terraform.lock.hcl
+ibm/terraform.tfstate
+ibm/terraform.tfstate.backup
+ibm/terraform.tfvars

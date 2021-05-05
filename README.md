@@ -20,31 +20,24 @@ git clone https://github.com/Apollo-Workflows/Sentiment-Analysis
 cd Sentiment-Analysis
 ```
 
-#### Deploy the serverless functions
 
-The serverless functions are in `py-functions-amazon` or `py-functions-google`. You can deploy a mix of them to Amazon and Google, but `sentim-inference` is only available for Amazon.
+#### Autodeploy
+1. Save the credentials for your cloud provider in the according subfolder:
+   - AWS: Put credential file under `aws/credentials`
+   - IBM: Add `ibmcloud_api_key` to `ibm/terraform.tfvars`
+2. Run `docker run --rm -v ${PWD}:/app/ chrisengelhardt/apollo-autodeploy --help` from within the directory of your chosen cloud provider
 
-Furthermore, ensure that `sentim-inference` has Tensorflow Lite available (you can attach this Lambda Layer: `s3://jak-sentim-bucket/tflite-for-amazon-linux-env.zip`), and runs on Python 3.7.
-
-For auto deployment on AWS you can put your credentials file to `py-functions-amazon/credentials` and execute `./deploy.sh` (terraform needs to be installed).
-
-#### Run the workflow
-
-
-Open `workflow.yaml`, and update the `resource` fields to the ARNs of your deployed Lambdas. You can find the ARNs in your [AWS Lambda Console](http://console.aws.amazon.com/lambda).
-
-```yaml
- ...
- properties:
-    - name: "resource"
-      value: "arn:aws:lambda:XXXXXXXXXXXXXXXXXXXXXX:sentim-inference"
- ...
-```
-
-Then, you can run the workflow:
+Note: For IBM you have to create a namespace first and place it into `ifm.tf` at line `namespace = "YOURNAMESPACE"`.
 
 ```
-$ java -jar YOUR_PATH_TO_xAFCL.jar ./workflow.yaml ./input.json
+Usage: /app/deploy.sh [--help] [--region region] [--url] [--mapping]
+
+Commands:
+        --help                  Show this help output.
+        --region region         Sets a specific region for the deployment. Use a region from:
+                                https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html
+        --url                   Prints out all deployment urls
+        --mappings              Creates typeMapping.json with the deployment urls
 ```
 
 

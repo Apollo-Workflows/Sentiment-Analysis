@@ -40,33 +40,6 @@ Commands:
         --mappings              Creates typeMapping.json with the deployment urls
 ```
 
-#### Deploy the serverless functions
-
-The serverless functions are in `py-functions-amazon` or `py-functions-google`. You can deploy a mix of them to Amazon and Google, but `sentim-inference` is only available for Amazon.
-
-Furthermore, ensure that `sentim-inference` has Tensorflow Lite available (you can attach this Lambda Layer: `s3://jak-sentim-bucket/tflite-for-amazon-linux-env.zip`), and runs on Python 3.7.
-
-For auto deployment on AWS you can put your credentials file to `py-functions-amazon/credentials` and execute `./deploy.sh` (terraform needs to be installed).
-
-#### Run the workflow
-
-
-Open `workflow.yaml`, and update the `resource` fields to the ARNs of your deployed Lambdas. You can find the ARNs in your [AWS Lambda Console](http://console.aws.amazon.com/lambda).
-
-```yaml
- ...
- properties:
-    - name: "resource"
-      value: "arn:aws:lambda:XXXXXXXXXXXXXXXXXXXXXX:sentim-inference"
- ...
-```
-
-Then, you can run the workflow:
-
-```
-$ java -jar YOUR_PATH_TO_xAFCL.jar ./workflow.yaml ./input.json
-```
-
 
 #### References
 

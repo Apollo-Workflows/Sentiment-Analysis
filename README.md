@@ -20,6 +20,26 @@ git clone https://github.com/Apollo-Workflows/Sentiment-Analysis
 cd Sentiment-Analysis
 ```
 
+
+#### Autodeploy
+1. Save the credentials for your cloud provider in the according subfolder:
+   - AWS: Put credential file under `aws/credentials`
+   - IBM: Add `ibmcloud_api_key` to `ibm/terraform.tfvars`
+2. Run `docker run --rm -v ${PWD}:/app/ chrisengelhardt/apollo-autodeploy --help` from within the directory of your chosen cloud provider
+
+Note: For IBM you have to create a namespace first and place it into `ifm.tf` at line `namespace = "YOURNAMESPACE"`.
+
+```
+Usage: /app/deploy.sh [--help] [--region region] [--url] [--mapping]
+
+Commands:
+        --help                  Show this help output.
+        --region region         Sets a specific region for the deployment. Use a region from:
+                                https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html
+        --url                   Prints out all deployment urls
+        --mappings              Creates typeMapping.json with the deployment urls
+```
+
 #### Deploy the serverless functions
 
 The serverless functions are in `py-functions-amazon` or `py-functions-google`. You can deploy a mix of them to Amazon and Google, but `sentim-inference` is only available for Amazon.

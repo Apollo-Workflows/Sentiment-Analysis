@@ -103,6 +103,12 @@ def annotate_sentim_tweet(tweet):
 
     if((poslen > 0) and (neglen > 0)):
         tweet_sentiment = [possum / poslen, negsum / neglen]  # mean avg
+    
+    if tweet_sentiment[0] != tweet_sentiment[0]:
+        tweet_sentiment[0] = None
+    
+    if tweet_sentiment[1] != tweet_sentiment[1]:
+        tweet_sentiment[1] = None
 
     res = {**tweet, 'sentiment': tweet_sentiment}
     # reduce size of output, we can identify tweets later by their tweet_id

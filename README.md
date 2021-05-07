@@ -23,11 +23,16 @@ cd Sentiment-Analysis
 
 #### Autodeploy
 1. Save the credentials for your cloud provider in the according subfolder:
-   - AWS: Put credential file under `aws/credentials`
-   - IBM: Add `ibmcloud_api_key` to `ibm/terraform.tfvars`
+   - AWS: Go to the service IAM and create a new user with the access type `Programmatic access` and attach the `AdministratorAccess` policy, which is part of the existing policies. You can copy the `Access key ID` and `Secret access key` and put it into the following format and save it under `aws/credentials`:
+        ```
+        [default]
+        aws_access_key_id = <Your access key ID>
+        aws_secret_access_key = <Your secret access key>
+        ```
+   - IBM: Create the `ibmcloud_api_key` [here](https://cloud.ibm.com/iam/apikeys) add it to `ibm/terraform.tfvars`
 2. 
    - A: Deploy to all providers:
-        Run from root dir `docker run --rm -it --entrypoint=/app/deployAll.sh -v ${PWD}:/app/ apollo-autodeploy`
+        Run from root dir `docker run --rm -it --entrypoint=/app/deployAll.sh -v ${PWD}:/app/ chrisengelhardt/apollo-autodeploy`
    - B: Deploy single provider with custom settings:
         Run `docker run --rm -v ${PWD}:/app/ chrisengelhardt/apollo-autodeploy --help` from within the directory of your chosen cloud provider
 

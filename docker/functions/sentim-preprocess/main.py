@@ -10,7 +10,6 @@ def preprocess(tweet):
   # In each sentence, only keep alpha numeric
   sencences = [ re.sub('[^0-9a-zA-Z]+', '*', sentence) for sentence in sentences ]
 
-  print("sentences: ", sentences)
   processed_sentences = []
   for sentence in sentences: 
     processed_sentence = sentence.split(" ") # split per word

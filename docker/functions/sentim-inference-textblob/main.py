@@ -1,12 +1,10 @@
 def get_sentence_sentiment(sentence, ttl=3):
 
-    print("sentence: ", " ".join(sentence))
     textbl = TextBlob(" ".join(sentence))
     # -1.0 to 1.0
     sentiment = textbl.sentiment.polarity
         # to form pos_conf, neg_conf (TODO)
     sent =  [ sentiment, -sentiment  ]
-    print("get_sentence_sentiment res", sent)
     return sent
 
 

@@ -27,7 +27,7 @@ cd Sentiment-Analysis
    - IBM: Add `ibmcloud_api_key` to `ibm/terraform.tfvars`
 2. 
    - A: Deploy to all providers:
-        Run from root dir `docker run --rm -it --entrypoint=/app/deployAll.sh -v ${PWD}:/app/ apollo-autodeploy`
+        Run from root dir `docker run --rm -it --entrypoint=/app/deployAll.sh -v ${PWD}:/app/ chrisengelhardt/apollo-autodeploy`
    - B: Deploy single provider with custom settings:
         Run `docker run --rm -v ${PWD}:/app/ chrisengelhardt/apollo-autodeploy --help` from within the directory of your chosen cloud provider
 

@@ -7,7 +7,7 @@ import math
 
 # IBM wrapper
 def main(args):
-    res = sentim_inference(args)
+    res = sentim_reduce(args)
     return res
 
 
@@ -15,18 +15,8 @@ def main(args):
 def lambda_handler(event, context):
     # read in the args from the POST object
     json_input = json.loads(event["body"])
-    res = sentim_inference(json_input)
+    res = sentim_reduce(json_input)
     return {"statusCode": 200, "body": json.dumps(res)}
-
-
-# Docker wrapper
-if __name__ == "__main__":
-    # read the json
-    json_input = json.loads(open("jsonInput.json").read())
-    result = sentim_inference(json_input)
-
-    # write to std out
-    print(json.dumps(result))
 
 
 ##################################################
@@ -92,3 +82,12 @@ def sentim_reduce(j):
     res = {"analysis_json": analysis_json, "churn": churn}
 
     return res
+
+# Docker wrapper
+if __name__ == "__main__":
+    # read the json
+    json_input = json.loads(open("jsonInput.json").read())
+    result = sentim_reduce(json_input)
+
+    # write to std out
+    print(json.dumps(result))

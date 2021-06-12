@@ -12,12 +12,15 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 folderName=$(basename $1)
+pwd=$(pwd)
 
 cd $1
 
 mkdir -p ../tmp
 cp -r * ../tmp
 cd ../tmp
-zip -r ../${folderName}.zip .
+mv main.py __main__.py
+rm Dockerfile
+zip -r $pwd/tmp/${folderName}.zip .
 cd ..
 rm -r tmp

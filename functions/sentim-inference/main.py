@@ -3,7 +3,6 @@ import re
 import os
 import random
 import json
-sys.path.append('/opt/site-packages') 
 import numpy as np
 import tflite_runtime.interpreter as tflite
 
@@ -25,6 +24,15 @@ def lambda_handler(event, context):
     res = sentim_inference(json_input)
     return {"statusCode": 200, "body": json.dumps(res)}
 
+
+# Docker wrapper
+if __name__ == "__main__":
+    # read the json
+    json_input = json.loads(open("jsonInput.json").read())
+    result = sentim_inference(json_input)
+
+    # write to std out
+    print(json.dumps(result))
 
 
 ##################################################
@@ -155,12 +163,3 @@ def sentim_inference(j):
     annotated_tweets = [annotate_sentim_tweet(tweet) for tweet in tokenized_tweets]
 
     return {"annotated_tweets": annotated_tweets}
-
-# Docker wrapper
-if __name__ == "__main__":
-    # read the json
-    json_input = json.loads(open("jsonInput.json").read())
-    result = sentim_inference(json_input)
-
-    # write to std out
-    print(json.dumps(result))

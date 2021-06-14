@@ -28,7 +28,7 @@ provider "ibm" {
 locals {
   function_names = ["sentim-batch","sentim-preprocess","sentim-reduce"]
   function_docker_names = ["sentim-inference-textblob","sentim-inference"]
-  function_docker_images = ["gipfelen/textblob-for-ibm-linux-env","gipfelen/tflite_runntime-for-ibm-linux-env:1.0"]
+  function_docker_images = ["gipfelen/textblob-for-ibm-linux-env","gipfelen/tflite_runntime-for-ibm-linux-env:1.2"]
 }
 
 

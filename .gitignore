@@ -17,3 +17,14 @@ ibm/.terraform.lock.hcl
 ibm/terraform.tfstate
 ibm/terraform.tfstate.backup
 ibm/terraform.tfvars
+aws/tmp/sentim-batch.zip
+aws/tmp/sentim-inference-textblob.zip
+aws/tmp/sentim-inference.zip
+aws/tmp/sentim-preprocess.zip
+aws/tmp/sentim-reduce.zip
+ibm/tmp/sentim-batch.zip
+ibm/tmp/sentim-inference-textblob.zip
+ibm/tmp/sentim-inference.zip
+ibm/tmp/sentim-preprocess.zip
+ibm/tmp/sentim-reduce.zip
+ibm/.terraform.tfstate.lock.info

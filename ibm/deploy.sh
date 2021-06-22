@@ -57,17 +57,17 @@ do
 	shift
 done
 
-rm functions/*.zip
+mkdir -p tmp
+rm tmp/*.zip
 
-./build.sh functions/sentim-batch
-./build.sh functions/sentim-inference
-./build.sh functions/sentim-inference-textblob
-./build.sh functions/sentim-preprocess
-./build.sh functions/sentim-reduce
-
+./build.sh ../functions/sentim-batch
+./build.sh ../functions/sentim-inference
+./build.sh ../functions/sentim-inference-textblob
+./build.sh ../functions/sentim-preprocess
+./build.sh ../functions/sentim-reduce
 
 terraform init
 
 terraform apply -auto-approve -var="region=$region"
 
-rm functions/*.zip
+rm tmp/*.zip

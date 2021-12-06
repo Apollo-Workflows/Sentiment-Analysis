@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+require 'pathname'
+require 'English'
+
+desc 'pull OpenFaaS templates'
+task :templates do
+  system 'faas-cli', 'version'
+  raise 'faas-cli not available' unless $CHILD_STATUS.success?
+
+  sh 'faas-cli', 'template', 'pull'
+  sh 'faas-cli', 'template', 'store', 'pull', 'python3-flask'
+end
+
+desc 'build a function file'
+task :build, [:f] => :templates do |f: '*'|
+  Pathname.glob("#{f}.y*ml").each do |file|
+    sh 'faas-cli', 'build', '-f', file.to_s
+  end
+end
+
+desc 'publish a function file'
+task :publish, [:f] => :build do |f: '*'|
+  Pathname.glob("#{f}.y*ml").each do |file|
+    sh 'faas-cli', 'publish', '-f', file.to_s, '--platforms', 'linux/arm64,linux/arm,linux/amd64'
+  end
+end

@@ -35,8 +35,11 @@ IMDB_PAD = 0
 IMDB_START = 1
 IMDB_UNKNOWN = 2
 
+# Required since OpenFaaS puts addtional files in 'function' folder.
+model_path = "./text_classification_v2.tflite" if os.path.isfile("./text_classification_v2.tflite") else "./function/text_classification_v2.tflite"
+
 # load model
-interpreter = tflite.Interpreter(model_path="text_classification_v2.tflite")
+interpreter = tflite.Interpreter(model_path=model_path)
 interpreter.allocate_tensors()
 
 # get input and  output tensors

@@ -50,7 +50,7 @@ output_details = interpreter.get_output_details()
 # Converts an array of words ("tokens") to the int32 representation used in the NN
 def toImdbVocab(tokens):
     # TODO solve seg fault on nubers > 16000 (something with int32? maybe np throws?)
-    with open(get_path("imdb-head.vocab")) as vocabf:
+    with open(get_path("imdb-head.vocab"), "r") as vocabf:
         lines = [l.replace("\n", "") for l in vocabf.readlines()]
         translatedTokens = []
         # Prepend IMDB_START

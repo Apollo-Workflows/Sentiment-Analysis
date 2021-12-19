@@ -7,7 +7,7 @@
 
 if [[ $# -eq 0 ]] ; then
     echo 'Error: No path provided'
-    echo -e "\nUsage: $0 /path/to/lambda/fucntion \n" 
+    echo -e "\nUsage: $0 /path/to/lambda/fucntion \n"
     exit 1
 fi
 

@@ -6,24 +6,19 @@ functions:
   sentim-batch:
     lang: python3-flask
     handler: ../functions/sentim-batch
-    image: sentim-batch:latest
-
-  sentim-inference:
-    lang: python3-flask-debian
-    handler: ../functions/sentim-inference
-    image: sentim-inference:latest
+    image: <prefix>/sentim-batch:latest
 
   sentim-inference-textblob:
     lang: python3-flask-debian
     handler: ../functions/sentim-inference-textblob
-    image: sentim-inference-textblob:latest
+    image: <prefix>/sentim-inference-textblob:latest
 
   sentim-preprocess:
     lang: python3-flask
     handler: ../functions/sentim-preprocess
-    image: sentim-preprocess:latest
+    image: <prefix>/sentim-preprocess:latest
 
   sentim-reduce:
     lang: python3-flask
     handler: ../functions/sentim-reduce
-    image: sentim-reduce:latest
+    image: <prefix>/sentim-reduce:latest

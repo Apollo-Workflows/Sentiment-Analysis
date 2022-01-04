@@ -43,6 +43,6 @@ for i in ${FILE_ARG:-*}.y*ml; do
   faas-cli build -f "$i"
 
   if [ "$PUBLISH" == 1 ]; then
-    faas-cli publish -f "$i" --platforms linux/arm64,linux/arm,linux/amd64
+    faas-cli publish -f "$i" --platforms "linux/arm64,linux/arm,linux/amd64"
   fi
 done

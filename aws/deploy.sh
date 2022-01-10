@@ -8,7 +8,7 @@
 
 
 helpmenu () {
-   echo -e "Usage: $0 [--help] [--region region] [--url] [--mapping]\n" 
+   echo -e "Usage: $0 [--help] [--region region] [--url] [--mapping]\n"
 
    echo -e "Commands:"
    echo -e "\t--help\t\t\tShow this help output."

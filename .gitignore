@@ -28,3 +28,7 @@ ibm/tmp/sentim-inference.zip
 ibm/tmp/sentim-preprocess.zip
 ibm/tmp/sentim-reduce.zip
 ibm/.terraform.tfstate.lock.info
+
+# OpenFaaS
+openfaas/build
+openfaas/template

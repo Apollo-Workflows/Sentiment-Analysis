@@ -1,0 +1,24 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://127.0.0.1:8080 # replace with OpenFaaS gateway address
+functions:
+  sentim-batch:
+    lang: python3-flask
+    handler: ../functions/sentim-batch
+    image: <prefix>/sentim-batch:latest
+
+  sentim-inference-textblob:
+    lang: python3-flask-debian
+    handler: ../functions/sentim-inference-textblob
+    image: <prefix>/sentim-inference-textblob:latest
+
+  sentim-preprocess:
+    lang: python3-flask
+    handler: ../functions/sentim-preprocess
+    image: <prefix>/sentim-preprocess:latest
+
+  sentim-reduce:
+    lang: python3-flask
+    handler: ../functions/sentim-reduce
+    image: <prefix>/sentim-reduce:latest
